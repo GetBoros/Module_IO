@@ -3,9 +3,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Modules/ModuleManager.h"
 
-// def immplement  makes available to c++ module
-IMPLEMENT_MODULE ( FDefaultModuleImpl, Module_IO);
-
+IMPLEMENT_MODULE ( FDefaultModuleImpl, Module_IO);  // def immplement  makes available to c++ module
 
 // UAModule_IO
 UAModule_IO::UAModule_IO()
@@ -14,32 +12,30 @@ UAModule_IO::UAModule_IO()
 
 }
 //-------------------------------------------------------------------------------------------------------------
-void UAModule_IO::Game_Save()
+void UAModule_IO::Game_Save(const FTransform transform)
 {
-	UMySaveGame *save_game_instance;
-
-	save_game_instance = Cast<UMySaveGame>(UGameplayStatics::CreateSaveGameObject(UMySaveGame::StaticClass() ) );
+	UMySaveGame *save_game_instance = Cast<UMySaveGame>(UGameplayStatics::CreateSaveGameObject(UMySaveGame::StaticClass() ) );
 	if (!save_game_instance != 0)
 		return;
 
 	save_game_instance->Game_Language = Game_Language;
+	save_game_instance->Player_Transform = transform;
 
-	UGameplayStatics::SaveGameToSlot(save_game_instance, TEXT("MySaveSlot"), 0);      
+	UGameplayStatics::SaveGameToSlot(save_game_instance, TEXT("MySaveSlot"), 0);  // Save to slot class and set slot name for load
 }
 //-------------------------------------------------------------------------------------------------------------
-void UAModule_IO::Game_Load()
+void UAModule_IO::Game_Load(FTransform &transform)
 {
-	UMySaveGame *load_game_instance;
-
-	load_game_instance = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MySaveSlot"), 0) );
+	UMySaveGame *load_game_instance = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MySaveSlot"), 0) );  // if slot valid work with it
 	if (!load_game_instance != 0)
 		return;
 
 	Game_Language = load_game_instance->Game_Language;
+	transform = load_game_instance->Player_Transform;
 }
 //-------------------------------------------------------------------------------------------------------------
 UAModule_IO *UAModule_IO::Module_IO_Create()
 {
-	return NewObject<UAModule_IO>();;
+	return NewObject<UAModule_IO>();
 }
 //-------------------------------------------------------------------------------------------------------------

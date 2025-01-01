@@ -8,20 +8,16 @@ UENUM(BlueprintType) enum class EGame_Language : uint8
 	English UMETA(DisplayName = "English"),
 	Russian UMETA(DisplayName = "Russian")
 };
-
-// UMySaveGame
+//-------------------------------------------------------------------------------------------------------------
 UCLASS() class UMySaveGame : public USaveGame
 {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(VisibleAnywhere, Category = "SaveGameData") EGame_Language Game_Language;  // Change to enum
+	UPROPERTY(VisibleAnywhere, Category = "Save_Game_Data") EGame_Language Game_Language;  // Change to enum
+	UPROPERTY(VisibleAnywhere, Category = "Save_Game_Data") FTransform Player_Transform;  // Change to enum
 };
 //-------------------------------------------------------------------------------------------------------------
-
-
-
-// UAModule_IO
 UCLASS(Blueprintable) class MODULE_IO_API UAModule_IO : public UObject
 {
 	GENERATED_BODY()
@@ -29,11 +25,11 @@ UCLASS(Blueprintable) class MODULE_IO_API UAModule_IO : public UObject
 public:
 	UAModule_IO();
 
-	UFUNCTION(BlueprintCallable, Category = "Init") void Game_Save();
-	UFUNCTION(BlueprintCallable, Category = "Init") void Game_Load();
-	UFUNCTION(BlueprintCallable, Category = "Factory") static UAModule_IO *Module_IO_Create();
+	UFUNCTION(BlueprintCallable, Category = "Init") void Game_Save(const FTransform transform);
+	UFUNCTION(BlueprintCallable, Category = "Init") void Game_Load(FTransform &transform);
+	UFUNCTION(BlueprintCallable, Category = "Init") static UAModule_IO *Module_IO_Create();  // Need to create object in BP for call func
 
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Init") EGame_Language Game_Language;  // Change to enum
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Init") EGame_Language Game_Language;  // Prev player choose language
 };
 //-------------------------------------------------------------------------------------------------------------
 
