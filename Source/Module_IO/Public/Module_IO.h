@@ -3,18 +3,12 @@
 #include "GameFramework/SaveGame.h"
 #include "Module_IO.generated.h"     
 
-UENUM(BlueprintType) enum class EGame_Language : uint8
-{
-	English UMETA(DisplayName = "English"),
-	Russian UMETA(DisplayName = "Russian")
-};
 //-------------------------------------------------------------------------------------------------------------
 UCLASS() class UMySaveGame : public USaveGame
 {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(VisibleAnywhere, Category = "Save_Game_Data") EGame_Language Game_Language;  // Change to enum
 	UPROPERTY(VisibleAnywhere, Category = "Save_Game_Data") FTransform Player_Transform;  // Change to enum
 };
 //-------------------------------------------------------------------------------------------------------------
@@ -27,9 +21,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Init") void Game_Save(const FTransform transform);
 	UFUNCTION(BlueprintCallable, Category = "Init") void Game_Load(FTransform &transform);
-	UFUNCTION(BlueprintCallable, Category = "Init") static UAModule_IO *Module_IO_Create();  // Need to create object in BP for call func
 
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Init") EGame_Language Game_Language;  // Prev player choose language
+	UFUNCTION(BlueprintCallable, Category = "Init") static UAModule_IO *Module_IO_Create();  // Need to create object in BP for call func
 };
 //-------------------------------------------------------------------------------------------------------------
 

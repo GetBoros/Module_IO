@@ -7,7 +7,6 @@ IMPLEMENT_MODULE ( FDefaultModuleImpl, Module_IO);  // def immplement  makes ava
 
 // UAModule_IO
 UAModule_IO::UAModule_IO()
- : Game_Language(EGame_Language::Russian)
 {
 
 }
@@ -18,7 +17,6 @@ void UAModule_IO::Game_Save(const FTransform transform)
 	if (!save_game_instance != 0)
 		return;
 
-	save_game_instance->Game_Language = Game_Language;
 	save_game_instance->Player_Transform = transform;
 
 	UGameplayStatics::SaveGameToSlot(save_game_instance, TEXT("MySaveSlot"), 0);  // Save to slot class and set slot name for load
@@ -30,7 +28,6 @@ void UAModule_IO::Game_Load(FTransform &transform)
 	if (!load_game_instance != 0)
 		return;
 
-	Game_Language = load_game_instance->Game_Language;
 	transform = load_game_instance->Player_Transform;
 }
 //-------------------------------------------------------------------------------------------------------------
