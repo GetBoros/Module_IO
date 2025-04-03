@@ -8,27 +8,53 @@ IMPLEMENT_MODULE ( FDefaultModuleImpl, Module_IO);  // def immplement  makes ava
 // UAModule_IO
 UAModule_IO::UAModule_IO()
 {
+	//UMySaveGame* SaveGame = NewObject<UMySaveGame>();
+	//SaveGame->Player_Experience = 100.0f;
+	//SaveGame->Player_Attributes = { 1.0f, 2.0f, 3.0f };
+	//SaveGame->SaveToFile("SaveSlot1");
 
 }
 //-------------------------------------------------------------------------------------------------------------
-void UAModule_IO::Game_Save(const FTransform transform)
+float UAModule_IO::GAS_Attributes_Load()
 {
-	UMySaveGame *save_game_instance = Cast<UMySaveGame>(UGameplayStatics::CreateSaveGameObject(UMySaveGame::StaticClass() ) );
-	if (!save_game_instance != 0)
-		return;
+	UMySaveGame *load_game_instance = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MySaveSlot"), 0) );  // if slot valid work with it
+	if (!load_game_instance != 0)
+		return 0.0f;
 
-	save_game_instance->Player_Transform = transform;
+	return load_game_instance->Player_Experience;
+}
+//-------------------------------------------------------------------------------------------------------------
+void UAModule_IO::GAS_Attributes_Save(float &array)
+{
+	UMySaveGame *save_game_instance = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MySaveSlot"), 0) );
+
+	if (!save_game_instance != 0)
+		save_game_instance = NewObject<UMySaveGame>();
+
+	save_game_instance->Player_Experience = array;
 
 	UGameplayStatics::SaveGameToSlot(save_game_instance, TEXT("MySaveSlot"), 0);  // Save to slot class and set slot name for load
 }
 //-------------------------------------------------------------------------------------------------------------
-void UAModule_IO::Game_Load(FTransform &transform)
+FTransform UAModule_IO::Pawn_Transform_Load()
 {
 	UMySaveGame *load_game_instance = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MySaveSlot"), 0) );  // if slot valid work with it
 	if (!load_game_instance != 0)
-		return;
+		return FTransform {};
 
-	transform = load_game_instance->Player_Transform;
+	return load_game_instance->Player_Transform;
+}
+//-------------------------------------------------------------------------------------------------------------
+void UAModule_IO::Pawn_Transform_Save(const FTransform &transform)
+{
+	UMySaveGame *save_game_instance = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MySaveSlot"), 0) );
+	
+	if (!save_game_instance != 0)
+		save_game_instance = NewObject<UMySaveGame>();
+
+	save_game_instance->Player_Transform = transform;
+
+	UGameplayStatics::SaveGameToSlot(save_game_instance, TEXT("MySaveSlot"), 0);  // Save to slot class and set slot name for load
 }
 //-------------------------------------------------------------------------------------------------------------
 UAModule_IO *UAModule_IO::Module_IO_Create()
