@@ -15,23 +15,28 @@ UAModule_IO::UAModule_IO()
 
 }
 //-------------------------------------------------------------------------------------------------------------
-float UAModule_IO::GAS_Attributes_Load()
+TArray<float> UAModule_IO::GAS_Attributes_Load()
 {
-	UMySaveGame *load_game_instance = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MySaveSlot"), 0) );  // if slot valid work with it
-	if (!load_game_instance != 0)
-		return 0.0f;
+	TArray<float> test;
+	UMySaveGame *load_game_instance;
 
-	return load_game_instance->Player_Experience;
+	test.SetNumZeroed(4);
+	load_game_instance = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MySaveSlot"), 0) );  // if slot valid work with it
+
+	if (!load_game_instance != 0)
+		return test;
+
+	return load_game_instance->Player_Attributes;
 }
 //-------------------------------------------------------------------------------------------------------------
-void UAModule_IO::GAS_Attributes_Save(float &array)
+void UAModule_IO::GAS_Attributes_Save(TArray<float> &player_attributes)
 {
 	UMySaveGame *save_game_instance = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MySaveSlot"), 0) );
 
 	if (!save_game_instance != 0)
 		save_game_instance = NewObject<UMySaveGame>();
 
-	save_game_instance->Player_Experience = array;
+	save_game_instance->Player_Attributes = player_attributes;
 
 	UGameplayStatics::SaveGameToSlot(save_game_instance, TEXT("MySaveSlot"), 0);  // Save to slot class and set slot name for load
 }

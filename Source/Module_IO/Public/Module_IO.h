@@ -21,8 +21,8 @@ UCLASS(Blueprintable) class MODULE_IO_API UAModule_IO : public UObject
 public:
 	UAModule_IO();
 
-	UFUNCTION(BlueprintCallable, Category = "Init") float GAS_Attributes_Load();
-	UFUNCTION(BlueprintCallable, Category = "Init") void GAS_Attributes_Save(float &array);
+	UFUNCTION(BlueprintCallable, Category = "Init") TArray<float> GAS_Attributes_Load();
+	UFUNCTION(BlueprintCallable, Category = "Init") void GAS_Attributes_Save(TArray<float> &player_attributes);
 
 	UFUNCTION(BlueprintCallable, Category = "Init") FTransform Pawn_Transform_Load();
 	UFUNCTION(BlueprintCallable, Category = "Init") void Pawn_Transform_Save(const FTransform &transform);
