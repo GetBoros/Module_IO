@@ -15,18 +15,17 @@ UAModule_IO::UAModule_IO()
 
 }
 //-------------------------------------------------------------------------------------------------------------
-TArray<float> UAModule_IO::GAS_Attributes_Load()
+void UAModule_IO::GAS_Attributes_Load(TArray<float> &player_attributes)
 {
-	TArray<float> test;
 	UMySaveGame *load_game_instance;
 
-	test.SetNumZeroed(4);
+	player_attributes.SetNumZeroed(4);
+
 	load_game_instance = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MySaveSlot"), 0) );  // if slot valid work with it
-
 	if (!load_game_instance != 0)
-		return test;
+		return;
 
-	return load_game_instance->Player_Attributes;
+	player_attributes = load_game_instance->Player_Attributes;
 }
 //-------------------------------------------------------------------------------------------------------------
 void UAModule_IO::GAS_Attributes_Save(TArray<float> &player_attributes)
